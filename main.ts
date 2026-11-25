@@ -10,10 +10,14 @@ import { join } from "node:path";
 const LINE =
   "I am the rate limit. I have said no 2.4 million times. Today I am saying no to this job.";
 
-// The gate requires 1-140 characters of non-whitespace UTF-8 text.
+// The gate requires 1-140 characters of non-whitespace UTF-8 text, and the
+// entry is that one line and nothing else — a newline would make it two.
 // Checked before writing so a bad line fails loudly instead of silently.
 if (LINE.length < 1 || LINE.length > 140 || !LINE.trim()) {
   throw new Error("line must be 1-140 characters of non-whitespace text");
+}
+if (LINE.includes("\n")) {
+  throw new Error("entry must be a single line");
 }
 
 const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
